@@ -18,9 +18,9 @@ from discord.ext.commands import MissingRequiredArgument, CommandError
 from lottie.importers import importers as l_importers
 from lottie.exporters import exporters as l_exporters
 
-from core.models import DMDisabled, DummyMessage, getLogger
-from core.time import human_timedelta
-from core.utils import (
+from modmail.models import DMDisabled, DummyMessage, getLogger
+from modmail.time import human_timedelta
+from modmail.utils import (
     is_image_url,
     parse_channel_topic,
     match_title,

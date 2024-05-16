@@ -33,11 +33,11 @@ try:
 except ImportError:
     pass
 
-from core import checks
-from core.changelog import Changelog
-from core.clients import ApiClient, MongoDBClient, PluginDatabaseClient
-from core.config import ConfigManager
-from core.models import (
+from modmail import checks
+from modmail.changelog import Changelog
+from modmail.clients import ApiClient, MongoDBClient, PluginDatabaseClient
+from modmail.config import ConfigManager
+from modmail.models import (
     DMDisabled,
     HostingMethod,
     InvalidConfigError,
@@ -46,9 +46,9 @@ from core.models import (
     configure_logging,
     getLogger,
 )
-from core.thread import ThreadManager
-from core.time import human_timedelta
-from core.utils import extract_block_timestamp, normalize_alias, parse_alias, truncate, tryint, human_join
+from modmail.thread import ThreadManager
+from modmail.time import human_timedelta
+from modmail.utils import extract_block_timestamp, normalize_alias, parse_alias, truncate, tryint, human_join
 
 logger = getLogger(__name__)
 

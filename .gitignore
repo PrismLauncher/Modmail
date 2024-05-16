@@ -133,6 +133,7 @@ node_modules/
 plugins/*
 !plugins/registry.json
 !plugins/@local
+!plugins/__init__.py
 config.json
 temp/
 test.py

@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from core.models import HostingMethod, PermissionLevel, getLogger
+from modmail.models import HostingMethod, PermissionLevel, getLogger
 
 logger = getLogger(__name__)
 

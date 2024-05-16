@@ -21,17 +21,17 @@ from discord.ext.commands.view import StringView
 from aiohttp import ClientResponseError
 from packaging.version import Version
 
-from core import checks, utils
-from core.changelog import Changelog
-from core.models import (
+from modmail import checks, utils
+from modmail.changelog import Changelog
+from modmail.models import (
     HostingMethod,
     InvalidConfigError,
     PermissionLevel,
     UnseenFormatter,
     getLogger,
 )
-from core.utils import trigger_typing, truncate, DummyParam
-from core.paginator import EmbedPaginatorSession, MessagePaginatorSession
+from modmail.utils import trigger_typing, truncate, DummyParam
+from modmail.paginator import EmbedPaginatorSession, MessagePaginatorSession
 
 
 logger = getLogger(__name__)

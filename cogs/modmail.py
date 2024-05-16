@@ -13,12 +13,12 @@ from discord.utils import escape_markdown
 
 from dateutil import parser
 
-from core import checks
-from core.models import DMDisabled, PermissionLevel, SimilarCategoryConverter, getLogger
-from core.paginator import EmbedPaginatorSession
-from core.thread import Thread
-from core.time import UserFriendlyTime, human_timedelta
-from core.utils import *
+from modmail import checks
+from modmail.models import DMDisabled, PermissionLevel, SimilarCategoryConverter, getLogger
+from modmail.paginator import EmbedPaginatorSession
+from modmail.thread import Thread
+from modmail.time import UserFriendlyTime, human_timedelta
+from modmail.utils import *
 
 logger = getLogger(__name__)
 

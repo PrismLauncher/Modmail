@@ -11,7 +11,7 @@ from urllib import parse
 import discord
 from discord.ext import commands
 
-from core.models import getLogger
+from modmail.models import getLogger
 
 
 __all__ = [
