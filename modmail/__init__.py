@@ -52,10 +52,6 @@ from modmail.utils import extract_block_timestamp, normalize_alias, parse_alias,
 
 logger = getLogger(__name__)
 
-temp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "temp")
-if not os.path.exists(temp_dir):
-    os.mkdir(temp_dir)
-
 if sys.platform == "win32":
     try:
         asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
@@ -83,7 +79,7 @@ class ModmailBot(commands.Bot):
 
         self.threads = ThreadManager(self)
 
-        log_dir = os.path.join(temp_dir, "logs")
+        log_dir = "logs"
         if not os.path.exists(log_dir):
             os.mkdir(log_dir)
         self.log_file_path = os.path.join(log_dir, "modmail.log")
