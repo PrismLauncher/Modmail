@@ -23,6 +23,7 @@ from discord.ext import commands, tasks
 from discord.ext.commands.view import StringView
 from emoji import is_emoji
 from packaging.version import Version
+import uvloop
 
 
 try:
@@ -1773,47 +1774,7 @@ class ModmailBot(commands.Bot):
 
 
 def main():
-    try:
-        # noinspection PyUnresolvedReferences
-        import uvloop  # type: ignore
-
-        logger.debug("Setting up with uvloop.")
-        uvloop.install()
-    except ImportError:
-        pass
-
-    try:
-        import cairosvg  # noqa: F401
-    except OSError:
-        if os.name == "nt":
-            if struct.calcsize("P") * 8 != 64:
-                logger.error(
-                    "Unable to import cairosvg, ensure your Python is a 64-bit version: https://www.python.org/downloads/"
-                )
-            else:
-                logger.error(
-                    "Unable to import cairosvg, install GTK Installer for Windows and restart your system (https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases/latest)"
-                )
-        else:
-            if "ubuntu" in platform.version().lower() or "debian" in platform.version().lower():
-                logger.error(
-                    "Unable to import cairosvg, try running `sudo apt-get install libpangocairo-1.0-0` or report on our support server with your OS details: https://discord.gg/etJNHCQ"
-                )
-            else:
-                logger.error(
-                    "Unable to import cairosvg, report on our support server with your OS details: https://discord.gg/etJNHCQ"
-                )
-        sys.exit(0)
-
-    # check discord version
-    discord_version = "2.3.2"
-    if discord.__version__ != discord_version:
-        logger.error(
-            "Dependencies are not updated, run pipenv install. discord.py version expected %s, received %s",
-            discord_version,
-            discord.__version__,
-        )
-        sys.exit(0)
+    uvloop.install()
 
     bot = ModmailBot()
     bot.run()
