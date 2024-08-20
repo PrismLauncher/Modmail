@@ -11,7 +11,7 @@ from aiohttp import ClientResponseError, ClientResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.errors import ConfigurationError
 
-from core.models import InvalidConfigError, getLogger
+from modmail.models import InvalidConfigError, getLogger
 
 logger = getLogger(__name__)
 

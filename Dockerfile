@@ -1,4 +1,4 @@
-FROM python:3.11-slim-bookworm as base
+FROM python:3.11-slim-bookworm AS base
 
 RUN apt-get update &&  \
     apt-get install --no-install-recommends -y \
@@ -10,29 +10,36 @@ RUN apt-get update &&  \
     # Create a non-root user.
     useradd --shell /usr/sbin/nologin --create-home -d /opt/modmail modmail
 
-FROM base as builder
-
-COPY requirements.txt .
-
-RUN pip install --root-user-action=ignore --no-cache-dir --upgrade pip wheel && \
-    python -m venv /opt/modmail/.venv && \
-    . /opt/modmail/.venv/bin/activate && \
-    pip install --no-cache-dir --upgrade -r requirements.txt
-
-FROM base
-
-# Copy the entire venv.
-COPY --from=builder --chown=modmail:modmail /opt/modmail/.venv /opt/modmail/.venv
-
-# Copy repository files.
-WORKDIR /opt/modmail
 USER modmail:modmail
-COPY --chown=modmail:modmail . .
+WORKDIR /opt/modmail
 
-# This sets some Python runtime variables and disables the internal auto-update.
+FROM base AS builder
+
+USER root
+RUN pip install poetry==1.8.3
+USER modmail:modmail
+
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
+
+RUN touch README.md
+COPY pyproject.toml poetry.lock ./
+
+RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
+
+FROM base as runtime
+
+ENV VIRTUAL_ENV=/opt/modmail/.venv \
+    PATH="/opt/modmail/.venv/bin:$PATH"
+
+COPY --from=builder /opt/modmail/ /opt/modmail/
+
+COPY ./ /opt/modmail/
+
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PATH=/opt/modmail/.venv/bin:$PATH \
     USING_DOCKER=yes
 
 CMD ["python", "bot.py"]

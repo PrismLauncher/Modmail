@@ -23,6 +23,7 @@ from discord.ext import commands, tasks
 from discord.ext.commands.view import StringView
 from emoji import is_emoji
 from packaging.version import Version
+import uvloop
 
 
 try:
@@ -33,11 +34,11 @@ try:
 except ImportError:
     pass
 
-from core import checks
-from core.changelog import Changelog
-from core.clients import ApiClient, MongoDBClient, PluginDatabaseClient
-from core.config import ConfigManager
-from core.models import (
+from modmail import checks
+from modmail.changelog import Changelog
+from modmail.clients import ApiClient, MongoDBClient, PluginDatabaseClient
+from modmail.config import ConfigManager
+from modmail.models import (
     DMDisabled,
     HostingMethod,
     InvalidConfigError,
@@ -46,15 +47,11 @@ from core.models import (
     configure_logging,
     getLogger,
 )
-from core.thread import ThreadManager
-from core.time import human_timedelta
-from core.utils import extract_block_timestamp, normalize_alias, parse_alias, truncate, tryint, human_join
+from modmail.thread import ThreadManager
+from modmail.time import human_timedelta
+from modmail.utils import extract_block_timestamp, normalize_alias, parse_alias, truncate, tryint, human_join
 
 logger = getLogger(__name__)
-
-temp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "temp")
-if not os.path.exists(temp_dir):
-    os.mkdir(temp_dir)
 
 if sys.platform == "win32":
     try:
@@ -83,7 +80,7 @@ class ModmailBot(commands.Bot):
 
         self.threads = ThreadManager(self)
 
-        log_dir = os.path.join(temp_dir, "logs")
+        log_dir = "logs"
         if not os.path.exists(log_dir):
             os.mkdir(log_dir)
         self.log_file_path = os.path.join(log_dir, "modmail.log")
@@ -1777,47 +1774,7 @@ class ModmailBot(commands.Bot):
 
 
 def main():
-    try:
-        # noinspection PyUnresolvedReferences
-        import uvloop  # type: ignore
-
-        logger.debug("Setting up with uvloop.")
-        uvloop.install()
-    except ImportError:
-        pass
-
-    try:
-        import cairosvg  # noqa: F401
-    except OSError:
-        if os.name == "nt":
-            if struct.calcsize("P") * 8 != 64:
-                logger.error(
-                    "Unable to import cairosvg, ensure your Python is a 64-bit version: https://www.python.org/downloads/"
-                )
-            else:
-                logger.error(
-                    "Unable to import cairosvg, install GTK Installer for Windows and restart your system (https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases/latest)"
-                )
-        else:
-            if "ubuntu" in platform.version().lower() or "debian" in platform.version().lower():
-                logger.error(
-                    "Unable to import cairosvg, try running `sudo apt-get install libpangocairo-1.0-0` or report on our support server with your OS details: https://discord.gg/etJNHCQ"
-                )
-            else:
-                logger.error(
-                    "Unable to import cairosvg, report on our support server with your OS details: https://discord.gg/etJNHCQ"
-                )
-        sys.exit(0)
-
-    # check discord version
-    discord_version = "2.3.2"
-    if discord.__version__ != discord_version:
-        logger.error(
-            "Dependencies are not updated, run pipenv install. discord.py version expected %s, received %s",
-            discord_version,
-            discord.__version__,
-        )
-        sys.exit(0)
+    uvloop.install()
 
     bot = ModmailBot()
     bot.run()

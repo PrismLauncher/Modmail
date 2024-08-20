@@ -18,10 +18,10 @@ from discord.ext import commands
 
 from packaging.version import Version
 
-from core import checks
-from core.models import PermissionLevel, getLogger
-from core.paginator import EmbedPaginatorSession
-from core.utils import truncate, trigger_typing
+from modmail import checks
+from modmail.models import PermissionLevel, getLogger
+from modmail.paginator import EmbedPaginatorSession
+from modmail.utils import truncate, trigger_typing
 
 logger = getLogger(__name__)
 

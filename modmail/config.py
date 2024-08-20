@@ -11,10 +11,10 @@ import isodate
 import discord
 from discord.ext.commands import BadArgument
 
-from core._color_data import ALL_COLORS
-from core.models import DMDisabled, InvalidConfigError, Default, getLogger
-from core.time import UserFriendlyTime
-from core.utils import strtobool
+from modmail._color_data import ALL_COLORS
+from modmail.models import DMDisabled, InvalidConfigError, Default, getLogger
+from modmail.time import UserFriendlyTime
+from modmail.utils import strtobool
 
 logger = getLogger(__name__)
 load_dotenv()

@@ -5,8 +5,8 @@ from typing import List
 
 from discord import Embed
 
-from core.models import getLogger
-from core.utils import truncate
+from modmail.models import getLogger
+from modmail.utils import truncate
 
 logger = getLogger(__name__)
 
