@@ -139,3 +139,5 @@ temp/
 test.py
 stack.yml
 .github/workflows/build_docker.yml
+
+result
