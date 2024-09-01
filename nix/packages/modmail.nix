@@ -114,6 +114,7 @@ buildPythonApplication {
   pythonRelaxDeps = [
     "packaging"
     "defusedxml"
+    "uvloop"
   ];
 
   pythonImportsCheck = [ "modmail" ];
