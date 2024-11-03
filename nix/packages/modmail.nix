@@ -112,8 +112,9 @@ buildPythonApplication {
   ];
 
   pythonRelaxDeps = [
-    "packaging"
+    "attrs"
     "defusedxml"
+    "packaging"
     "uvloop"
   ];
 
