@@ -115,6 +115,7 @@ buildPythonApplication {
     "attrs"
     "defusedxml"
     "packaging"
+    "pillow"
     "uvloop"
   ];
 
