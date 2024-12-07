@@ -3,7 +3,6 @@ Retrieved from matplotlib colors library.
 Slightly modified to conform with usage.
 """
 
-
 BASE_COLORS = {
     "b": "0000ff",
     "g": "007f00",
@@ -43,7 +42,9 @@ DISCORD_COLORS = {
 }
 
 # Normalize name to "discord:<name>" to avoid name collisions.
-DISCORD_COLORS_NORM = {"discord:" + name: value for name, value in DISCORD_COLORS.items()}
+DISCORD_COLORS_NORM = {
+    "discord:" + name: value for name, value in DISCORD_COLORS.items()
+}
 
 
 # These colors are from Tableau

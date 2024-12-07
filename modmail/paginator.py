@@ -286,14 +286,20 @@ class PageButton(Button):
 
 
 class PageSelect(Select):
-    def __init__(self, handler: PaginatorSession, pages: typing.List[typing.Tuple[str]]):
+    def __init__(
+        self, handler: PaginatorSession, pages: typing.List[typing.Tuple[str]]
+    ):
         self.handler = handler
         options = []
         for n, (label, description) in enumerate(pages):
-            options.append(discord.SelectOption(label=label, description=description, value=str(n)))
+            options.append(
+                discord.SelectOption(label=label, description=description, value=str(n))
+            )
 
         options = options[:25]  # max 25 options
-        super().__init__(placeholder="Select a page", min_values=1, max_values=1, options=options)
+        super().__init__(
+            placeholder="Select a page", min_values=1, max_values=1, options=options
+        )
 
     async def callback(self, interaction: Interaction):
         page = int(self.values[0])
@@ -332,7 +338,9 @@ class EmbedPaginatorSession(PaginatorSession):
                         create_select = False
 
                 if embed.description:
-                    description = embed.description[:40].replace("*", "").replace("`", "").strip()
+                    description = (
+                        embed.description[:40].replace("*", "").replace("`", "").strip()
+                    )
                     if len(embed.description) > 40:
                         description += "..."
                 else:
@@ -340,7 +348,9 @@ class EmbedPaginatorSession(PaginatorSession):
                 select_options.append((title, description))
 
             if create_select:
-                if len(set(x[0] for x in select_options)) != 1:  # must have unique authors
+                if (
+                    len(set(x[0] for x in select_options)) != 1
+                ):  # must have unique authors
                     self.select_menu = PageSelect(self, select_options)
 
     def add_page(self, item: Embed) -> None:
@@ -357,7 +367,9 @@ class EmbedPaginatorSession(PaginatorSession):
 
 
 class MessagePaginatorSession(PaginatorSession):
-    def __init__(self, ctx: commands.Context, *messages, embed: Embed = None, **options):
+    def __init__(
+        self, ctx: commands.Context, *messages, embed: Embed = None, **options
+    ):
         self.embed = embed
         self.footer_text = self.embed.footer.text if embed is not None else None
         super().__init__(ctx, *messages, **options)

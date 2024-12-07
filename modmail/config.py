@@ -187,7 +187,13 @@ class ConfigManager:
 
     colors = {"mod_color", "recipient_color", "main_color", "error_color"}
 
-    time_deltas = {"account_age", "guild_age", "thread_auto_close", "thread_cooldown", "log_expiration"}
+    time_deltas = {
+        "account_age",
+        "guild_age",
+        "thread_auto_close",
+        "thread_cooldown",
+        "log_expiration",
+    }
 
     booleans = {
         "use_user_id_channel_name",
@@ -254,19 +260,33 @@ class ConfigManager:
         data = deepcopy(self.defaults)
 
         # populate from env var and .env file
-        data.update({k.lower(): v for k, v in os.environ.items() if k.lower() in self.all_keys})
-        config_json = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "config.json")
+        data.update(
+            {k.lower(): v for k, v in os.environ.items() if k.lower() in self.all_keys}
+        )
+        config_json = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "config.json"
+        )
         if os.path.exists(config_json):
             logger.debug("Loading envs from config.json.")
             with open(config_json, "r", encoding="utf-8") as f:
                 # Config json should override env vars
                 try:
-                    data.update({k.lower(): v for k, v in json.load(f).items() if k.lower() in self.all_keys})
+                    data.update(
+                        {
+                            k.lower(): v
+                            for k, v in json.load(f).items()
+                            if k.lower() in self.all_keys
+                        }
+                    )
                 except json.JSONDecodeError:
-                    logger.critical("Failed to load config.json env values.", exc_info=True)
+                    logger.critical(
+                        "Failed to load config.json env values.", exc_info=True
+                    )
         self._cache = data
 
-        config_help_json = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config_help.json")
+        config_help_json = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "config_help.json"
+        )
         with open(config_help_json, "r", encoding="utf-8") as f:
             self.config_help = dict(sorted(json.load(f).items()))
 
@@ -408,7 +428,9 @@ class ConfigManager:
             except isodate.ISO8601Error:
                 try:
                     converter = UserFriendlyTime()
-                    time = await converter.convert(None, item, now=discord.utils.utcnow())
+                    time = await converter.convert(
+                        None, item, now=discord.utils.utcnow()
+                    )
                     if time.arg:
                         raise ValueError
                 except BadArgument as exc:
@@ -450,7 +472,9 @@ class ConfigManager:
         return self._cache.items()
 
     @classmethod
-    def filter_valid(cls, data: typing.Dict[str, typing.Any]) -> typing.Dict[str, typing.Any]:
+    def filter_valid(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> typing.Dict[str, typing.Any]:
         return {
             k.lower(): v
             for k, v in data.items()
@@ -458,7 +482,9 @@ class ConfigManager:
         }
 
     @classmethod
-    def filter_default(cls, data: typing.Dict[str, typing.Any]) -> typing.Dict[str, typing.Any]:
+    def filter_default(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> typing.Dict[str, typing.Any]:
         # TODO: use .get to prevent errors
         filtered = {}
         for k, v in data.items():

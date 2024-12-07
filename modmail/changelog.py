@@ -53,7 +53,9 @@ class Version:
         self.version = version.lstrip("vV")
         self.lines = lines.strip()
         self.fields = {}
-        self.changelog_url = f"https://github.com/modmail-dev/modmail/blob/{branch}/CHANGELOG.md"
+        self.changelog_url = (
+            f"https://github.com/modmail-dev/modmail/blob/{branch}/CHANGELOG.md"
+        )
         self.description = ""
         self.parse()
 
@@ -65,7 +67,9 @@ class Version:
         Parse the lines and split them into `description` and `fields`.
         """
         self.description = re.match(self.DESCRIPTION_REGEX, self.lines, re.DOTALL)
-        self.description = self.description.group(1).strip() if self.description is not None else ""
+        self.description = (
+            self.description.group(1).strip() if self.description is not None else ""
+        )
 
         matches = re.finditer(self.ACTION_REGEX, self.lines, re.DOTALL)
         for m in matches:
@@ -137,7 +141,9 @@ class Changelog:
         self.bot = bot
         self.text = text
         logger.debug("Fetching changelog from GitHub.")
-        self.versions = [Version(bot, branch, *m) for m in self.VERSION_REGEX.findall(text)]
+        self.versions = [
+            Version(bot, branch, *m) for m in self.VERSION_REGEX.findall(text)
+        ]
 
     @property
     def latest_version(self) -> Version:
@@ -186,7 +192,10 @@ class Changelog:
         if branch not in ("master", "development"):
             branch = "master"
 
-        url = url or f"https://raw.githubusercontent.com/modmail-dev/modmail/{branch}/CHANGELOG.md"
+        url = (
+            url
+            or f"https://raw.githubusercontent.com/modmail-dev/modmail/{branch}/CHANGELOG.md"
+        )
 
         async with await bot.session.get(url) as resp:
             return cls(bot, branch, await resp.text())
