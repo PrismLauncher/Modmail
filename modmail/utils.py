@@ -258,7 +258,9 @@ TOPIC_REGEX = re.compile(
 UID_REGEX = re.compile(r"\bUser ID:\s*(\d{17,21})\b", flags=re.IGNORECASE)
 
 
-def parse_channel_topic(text: str) -> typing.Tuple[typing.Optional[str], int, typing.List[int]]:
+def parse_channel_topic(
+    text: str,
+) -> typing.Tuple[typing.Optional[str], int, typing.List[int]]:
     """
     A helper to parse channel topics and respectivefully returns all the required values
     at once.
@@ -359,7 +361,8 @@ def match_other_recipients(text: str) -> typing.List[int]:
 def create_not_found_embed(word, possibilities, name, n=2, cutoff=0.6) -> discord.Embed:
     # Single reference of Color.red()
     embed = discord.Embed(
-        color=discord.Color.red(), description=f"**{name.capitalize()} `{word}` cannot be found.**"
+        color=discord.Color.red(),
+        description=f"**{name.capitalize()} `{word}` cannot be found.**",
     )
     val = get_close_matches(word, possibilities, n=n, cutoff=cutoff)
     if val:
@@ -369,7 +372,7 @@ def create_not_found_embed(word, possibilities, name, n=2, cutoff=0.6) -> discor
 
 def parse_alias(alias, *, split=True):
     def encode_alias(m):
-        return "\x1AU" + base64.b64encode(m.group(1).encode()).decode() + "\x1AU"
+        return "\x1aU" + base64.b64encode(m.group(1).encode()).decode() + "\x1aU"
 
     def decode_alias(m):
         return base64.b64decode(m.group(1).encode()).decode()
@@ -391,7 +394,7 @@ def parse_alias(alias, *, split=True):
         iterate = [alias]
 
     for a in iterate:
-        a = re.sub("\x1AU(.+?)\x1AU", decode_alias, a)
+        a = re.sub("\x1aU(.+?)\x1aU", decode_alias, a)
         if a[0] == a[-1] == '"':
             a = a[1:-1]
         aliases.append(a)
@@ -452,7 +455,9 @@ def get_top_role(member: discord.Member, hoisted=True):
             return role
 
 
-async def create_thread_channel(bot, recipient, category, overwrites, *, name=None, errors_raised=None):
+async def create_thread_channel(
+    bot, recipient, category, overwrites, *, name=None, errors_raised=None
+):
     name = name or bot.format_channel_name(recipient)
     errors_raised = errors_raised or []
 
@@ -475,7 +480,9 @@ async def create_thread_channel(bot, recipient, category, overwrites, *, name=No
             fallback = None
             fallback_id = bot.config["fallback_category_id"]
             if fallback_id:
-                fallback = discord.utils.get(category.guild.categories, id=int(fallback_id))
+                fallback = discord.utils.get(
+                    category.guild.categories, id=int(fallback_id)
+                )
                 if fallback and len(fallback.channels) >= 49:
                     fallback = None
 
@@ -546,7 +553,10 @@ def extract_block_timestamp(reason, id_):
             # found a deprecated version
             try:
                 after = (
-                    datetime.fromisoformat(end_time.group(1)).replace(tzinfo=timezone.utc) - now
+                    datetime.fromisoformat(end_time.group(1)).replace(
+                        tzinfo=timezone.utc
+                    )
+                    - now
                 ).total_seconds()
             except ValueError:
                 logger.warning(
@@ -561,7 +571,10 @@ def extract_block_timestamp(reason, id_):
     else:
         try:
             after = (
-                datetime.utcfromtimestamp(int(end_time.group(1))).replace(tzinfo=timezone.utc) - now
+                datetime.utcfromtimestamp(int(end_time.group(1))).replace(
+                    tzinfo=timezone.utc
+                )
+                - now
             ).total_seconds()
         except ValueError:
             logger.warning(
